@@ -1,20 +1,20 @@
 pragma solidity ^0.4.24;
 
-import "@aragon/os/contracts/apps/AragonApp.sol";
-import "@aragon/os/contracts/common/IsContract.sol";
-import "@aragon/os/contracts/lib/math/SafeMath.sol";
-import "@aragon/os/contracts/common/SafeERC20.sol";
-import "@aragon/os/contracts/lib/token/ERC20.sol";
-import "./bancor-formula/BancorFormula.sol";
+// import "@aragon/os/contracts/apps/AragonApp.sol";
+// import "@aragon/os/contracts/common/IsContract.sol";
+import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+import './bancor-formula/BancorFormula.sol';
 
 
-contract TokenSwap is AragonApp {
+contract TokenSwap /*is AragonApp*/ {
     using SafeERC20 for ERC20;    
     using SafeMath  for uint256;
     
-    bytes32 public constant PROVIDER   = keccak256("PROVIDER");
-    bytes32 public constant BUYER      = keccak256("BUYER");
-    bytes32 public constant SELLER     = keccak256("SELLER");
+    // bytes32 public constant PROVIDER   = keccak256("PROVIDER");
+    // bytes32 public constant BUYER      = keccak256("BUYER");
+    // bytes32 public constant SELLER     = keccak256("SELLER");
 
     uint256 public constant PCT_BASE = 10 ** 18; // 0% = 0; 1% = 10 ** 16; 100% = 10 ** 18
     uint32  public constant PPM = 1000000;  // parts per million
@@ -90,9 +90,9 @@ contract TokenSwap is AragonApp {
     * @notice Initialize tokenswap contract
     * @param _formula The address of the BancorFormula [computation] contract
     */
-    function initialize(IBancorFormula _formula) external onlyInit {
-        initialized();
-        require(isContract(_formula), ERROR_CONTRACT_IS_EOA);            
+    function initialize(IBancorFormula _formula) external /*onlyInit*/ {
+        // initialized();
+        // require(isContract(_formula), ERROR_CONTRACT_IS_EOA);            
         formula = _formula;
     }
 
@@ -117,12 +117,12 @@ contract TokenSwap is AragonApp {
         uint256    _exchangeRate     
     ) 
         external 
-        auth(PROVIDER)
+        // auth(PROVIDER)
     {
         require(_isBalanced(_tokenAsupply, _tokenBsupply, _exchangeRate),  
                 ERROR_POOL_NOT_BALANCED );
-        require(isContract(_tokenAaddress) && isContract(_tokenAaddress), 
-                ERROR_CONTRACT_IS_EOA);
+        // require(isContract(_tokenAaddress) && isContract(_tokenAaddress), 
+        //         ERROR_CONTRACT_IS_EOA);
         require(!poolProviders[msg.sender][keccak256(abi.encodePacked(_tokenAaddress, _tokenBaddress))], 
                 ERROR_POOL_EXISTS);
 
@@ -134,7 +134,7 @@ contract TokenSwap is AragonApp {
     * @param _poolId Id of the pool needed to be closed
     */
 
-    function closePool(uint256 _poolId) external auth(PROVIDER) {
+    function closePool(uint256 _poolId) external /*auth(PROVIDER)*/ {
         require(msg.sender == pools[_poolId].provider, ERROR_NOT_PROVIDER);
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
         
@@ -153,7 +153,7 @@ contract TokenSwap is AragonApp {
         uint256 _tokenBliquidity
     ) 
         external 
-        auth(PROVIDER)    
+        // auth(PROVIDER)    
     {
         require(msg.sender == pools[_poolId].provider, ERROR_NOT_PROVIDER);
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
@@ -179,7 +179,7 @@ contract TokenSwap is AragonApp {
         uint256 _tokenBliquidity        
     ) 
         external 
-        auth(PROVIDER)    
+        // auth(PROVIDER)
     {
         require(msg.sender == pools[_poolId].provider, ERROR_NOT_PROVIDER);
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
@@ -194,7 +194,7 @@ contract TokenSwap is AragonApp {
     * @param _poolId id of the pool 
     * @param _tokenAamount the price in tokens B which is going to be payed for tokens B
     */
-    function buy(uint256 _poolId, uint256 _tokenAamount) external auth(BUYER) {
+    function buy(uint256 _poolId, uint256 _tokenAamount) external /*auth(BUYER)*/ {
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
   
         uint256 tokenAid          = initializedTokens[pools[_poolId].tokenA];
@@ -217,7 +217,7 @@ contract TokenSwap is AragonApp {
     * @param _poolId id of the pool 
     * @param _tokenBamount the amount of tokens B which is going to be echanged for tokens A
     */
-    function sell(uint256 _poolId, uint256 _tokenBamount) public auth(SELLER) {
+    function sell(uint256 _poolId, uint256 _tokenBamount) public /*auth(SELLER)*/ {
         
         uint256 tokenAid          = initializedTokens[pools[_poolId].tokenA];
         uint256 tokenBid          = initializedTokens[pools[_poolId].tokenB];
@@ -249,7 +249,7 @@ contract TokenSwap is AragonApp {
         uint256 _totalTokenSupply
     )   
         internal
-        pure 
+        pure
         returns(uint32)
     {
         return uint32(uint256(PPM).mul(_tokenSupply).div(_exchangeRate.mul(_totalTokenSupply).div(uint256(PPM))));
@@ -265,7 +265,7 @@ contract TokenSwap is AragonApp {
         uint256 _supplyA, 
         uint256 _supplyB, 
         uint256 _exchangeRate
-    ) 
+    )
         internal
         pure
         returns(bool)

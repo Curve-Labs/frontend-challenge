@@ -1,4 +1,19 @@
 module.exports = {
+  compilers: {
+    solc: {
+      version: "0.4.24",
+      //docker: true,
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200
+        },
+      }
+    }
+  }
+};
+
+// module.exports = {
   // Uncommenting the defaults below 
   // provides for an easier quick-start with Ganache.
   // You can also follow this format for other networks;
@@ -18,4 +33,4 @@ module.exports = {
   //  }
   //}
   //
-};
+// };

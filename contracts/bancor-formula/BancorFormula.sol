@@ -2,7 +2,7 @@ pragma solidity 0.4.24;
 
 import './utility/Utils.sol';
 import './interfaces/IBancorFormula.sol';
-import "@aragon/os/contracts/lib/math/SafeMath.sol";
+import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
 contract BancorFormula is IBancorFormula, Utils {
     using SafeMath for uint256;
