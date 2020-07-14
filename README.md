@@ -1,6 +1,6 @@
 # Curve Labs Frontend Developer Challenge
 
-This repo contains a simplified version of a [TokenSwap](https://github.com/arsenyjin/tokenswap) dApp that incorporates Bancor bonding curve formula in order to implement a simple token swap exchange. 
+This repo contains a simplified version of a [TokenSwap](https://github.com/arsenyjin/tokenswap) dApp that incorporates the Bancor bonding curve formula in order to implement a simple token swap exchange. 
 
 Current version is a smart contracts only `truffle` dApp that lacks any DAO frameworks compared to the original implementation. 
 
