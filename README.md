@@ -33,6 +33,10 @@ The challenge would be to develop a simple [Uniswap](http://uniswap.exchange/) l
 
 Front-end app should use `React` & `TypeScript`
 
+## Bonus
+
+Bonus to the challenge would be to have a complete integration tests for the dApp.
+
 ## Submission
 
 To submit the challenge please:
