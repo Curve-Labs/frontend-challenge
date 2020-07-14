@@ -1,17 +1,23 @@
 pragma solidity ^0.4.24;
 
-// import "@aragon/os/contracts/apps/AragonApp.sol";
 // import "@aragon/os/contracts/common/IsContract.sol";
+
+// import 'openzeppelin-solidity/contracts/access/Roles.sol';
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import './bancor-formula/BancorFormula.sol';
 
 
-contract TokenSwap /*is AragonApp*/ {
+contract TokenSwap {
     using SafeERC20 for ERC20;    
     using SafeMath  for uint256;
-    
+    // using Roles for Roles.Role;
+
+    // Roles.Role private _providers;
+    // Roles.Role private _buyers;
+    // Roles.Role private _sellers;
+
     // bytes32 public constant PROVIDER   = keccak256("PROVIDER");
     // bytes32 public constant BUYER      = keccak256("BUYER");
     // bytes32 public constant SELLER     = keccak256("SELLER");
@@ -84,16 +90,10 @@ contract TokenSwap /*is AragonApp*/ {
     );
 
 
-    /***** external function *****/
-    
-    /**
-    * @notice Initialize tokenswap contract
-    * @param _formula The address of the BancorFormula [computation] contract
-    */
-    function initialize(IBancorFormula _formula) external /*onlyInit*/ {
+    constructor(address _formula) public {
         // initialized();
         // require(isContract(_formula), ERROR_CONTRACT_IS_EOA);            
-        formula = _formula;
+        formula = IBancorFormula(_formula);
     }
 
     /* pool related functions */
