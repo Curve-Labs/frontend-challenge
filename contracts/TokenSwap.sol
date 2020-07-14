@@ -1,8 +1,5 @@
 pragma solidity ^0.4.24;
 
-// import "@aragon/os/contracts/common/IsContract.sol";
-
-// import 'openzeppelin-solidity/contracts/access/Roles.sol';
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/SafeERC20.sol';
 import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
@@ -12,15 +9,6 @@ import './bancor-formula/BancorFormula.sol';
 contract TokenSwap {
     using SafeERC20 for ERC20;    
     using SafeMath  for uint256;
-    // using Roles for Roles.Role;
-
-    // Roles.Role private _providers;
-    // Roles.Role private _buyers;
-    // Roles.Role private _sellers;
-
-    // bytes32 public constant PROVIDER   = keccak256("PROVIDER");
-    // bytes32 public constant BUYER      = keccak256("BUYER");
-    // bytes32 public constant SELLER     = keccak256("SELLER");
 
     uint256 public constant PCT_BASE = 10 ** 18; // 0% = 0; 1% = 10 ** 16; 100% = 10 ** 18
     uint32  public constant PPM = 1000000;  // parts per million
@@ -91,7 +79,6 @@ contract TokenSwap {
 
     /* constructor */
     constructor(address _formula) public {
-        // require(isContract(_formula), ERROR_CONTRACT_IS_EOA);            
         formula = IBancorFormula(_formula);
     }
 
@@ -116,12 +103,9 @@ contract TokenSwap {
         uint256    _exchangeRate     
     ) 
         external 
-        // auth(PROVIDER)
     {
         require(_isBalanced(_tokenAsupply, _tokenBsupply, _exchangeRate),  
                 ERROR_POOL_NOT_BALANCED );
-        // require(isContract(_tokenAaddress) && isContract(_tokenAaddress), 
-        //         ERROR_CONTRACT_IS_EOA);
         require(!poolProviders[msg.sender][keccak256(abi.encodePacked(_tokenAaddress, _tokenBaddress))], 
                 ERROR_POOL_EXISTS);
 
@@ -152,7 +136,6 @@ contract TokenSwap {
         uint256 _tokenBliquidity
     ) 
         external 
-        // auth(PROVIDER)    
     {
         require(msg.sender == pools[_poolId].provider, ERROR_NOT_PROVIDER);
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
@@ -178,7 +161,6 @@ contract TokenSwap {
         uint256 _tokenBliquidity        
     ) 
         external 
-        // auth(PROVIDER)
     {
         require(msg.sender == pools[_poolId].provider, ERROR_NOT_PROVIDER);
         require(pools[_poolId].isActive, ERROR_POOL_NOT_ACTIVE);
