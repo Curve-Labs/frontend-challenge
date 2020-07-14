@@ -89,9 +89,8 @@ contract TokenSwap {
         uint256 amount 
     );
 
-
+    /* constructor */
     constructor(address _formula) public {
-        // initialized();
         // require(isContract(_formula), ERROR_CONTRACT_IS_EOA);            
         formula = IBancorFormula(_formula);
     }
