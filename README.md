@@ -14,7 +14,10 @@ Clone the repo:
 `git clone https://github.com/Curve-Labs/frontend-challenge.git && cd frontend-challenge`
 
 Install dependencies:
+
 `npm install`
+
+`npm install openzeppelin-solidity@2.0.0`
 
 Run truffle develop:
 `truffle develop`
