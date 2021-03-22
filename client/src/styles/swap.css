@@ -1,0 +1,11 @@
+.card {
+  width: 30vw;
+  border-radius: 20px;
+}
+
+.ant-card {
+  border-radius: 30px;
+}
+
+@media screen and (max-width: 1200px) {
+}

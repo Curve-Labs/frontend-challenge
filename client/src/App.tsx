@@ -1,13 +1,17 @@
-import React, { Suspense } from "react";
-import { Routes } from "./routes";
-import { Spin } from "antd";
-import "./App.css";
+import SwapComponent from "./components/swap/swap";
+// Context
+import { ConnectionProvider } from "./utils/connection";
+import "./styles/App.css";
 
 function App() {
   return (
-    <Suspense fallback={() => <Spin size="large" />}>
-      <Routes />
-    </Suspense>
+    <div className="App">
+      <header className="App-header">
+        <ConnectionProvider>
+          <SwapComponent />
+        </ConnectionProvider>
+      </header>
+    </div>
   );
 }
 

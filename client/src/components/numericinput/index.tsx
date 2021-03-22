@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Input } from "antd";
 
 export const NumericInput = React.forwardRef((props: any, ref: any) => {
+  const { value, setValue } = props;
   // The value of the number in input box
-  const [value, setValue] = useState<Number>();
+  // const [value, setValue] = useState<Number>();
   // When the value changes
   // Functions should implement this to make sure only number inputs are given
   const onChange = (e: any) => {
@@ -11,6 +12,7 @@ export const NumericInput = React.forwardRef((props: any, ref: any) => {
     const reg = /^-?\d*(\.\d*)?$/;
     if (reg.test(value) || value === "" || value === "-") {
       setValue(value);
+      props.onChange(value);
     }
   };
 

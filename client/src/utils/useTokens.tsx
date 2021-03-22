@@ -1,24 +1,22 @@
-// For handling the list of all swapable tokens
-import { useState } from "react";
-// Type annotations
-import { TokenAccount } from "../utils/types";
+import { useState, useEffect } from "react";
+import { Token } from "./types";
 
-/**
- * @summary Get all swapable tokens
- */
+// Hook to handle the tokens swapable
 const useTokens = () => {
-  const [tokens, setTokens] = useState<Array<TokenAccount>>(() => {
-    return [
+  const [tokens, setTokens] = useState<Array<Token> | []>([]);
+  // Get our tokens
+  useEffect(() => {
+    setTokens([
       {
         name: "tokenA",
         mintAddress: "12345",
       },
       {
         name: "tokenB",
-        mintAddress: "65753434",
+        mintAddress: "1234455",
       },
-    ];
-  });
+    ]);
+  }, []);
   return { tokens };
 };
 
