@@ -1,34 +1,37 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button, Card, notification } from "antd";
 import { ArrowDownOutlined } from "@ant-design/icons";
-import useTokens from "../../utils/useTokens";
-// Styles
 import "../../styles/swap.css";
 // Hooks
 import TokenInput from "../tokeninput";
 import { useTokenContract, useConnection, setUp } from "../../utils/connection";
 
 const SwapComponent = () => {
-  // Get our currencies
-  const { tokens, tokenPair } = useTokens();
-  // Get our web3 instance
-  const { web3, accounts } = useConnection();
+  // Get our web3 instance and tokens
+  const {
+    web3,
+    accounts,
+    tokenPair,
+    baseToken,
+    swapToken,
+    tokens,
+  } = useConnection();
   // Get our contracts
   const contracts = useTokenContract();
   // Ref for tokenInput
   const inputRef = useRef(null);
   // Ref for swapped token
   const swappedTokRef = useRef(null);
-  // The base token
-  const [baseToken, setBaseToken] = useState<string>("");
-  // The swap token
-  const [swapToken, setSwapToken] = useState<string>("");
   // Save the value of token A in token B
   const [tokenBVal, setTokenBVal] = useState<number | undefined>(undefined);
+  // Button message
+  const [buttonMsg, setButMsg] = useState<string>("Select a token");
   // Save the value of token B in token A
   const [tokenAVal, setTokenAVal] = useState<number | undefined>(undefined);
   // Loading state
   const [loading, setLoading] = useState<boolean>(false);
+  // Disabled state
+  const [disabled, setDisabled] = useState<boolean>(true);
   // SWap function
   const swap = () => {
     setLoading(true);
@@ -41,6 +44,8 @@ const SwapComponent = () => {
     } else {
       orderType = "sell";
     }
+    // If the token pair is the same, alert
+
     if (!contracts || !accounts) {
       notification.open({
         description: "Pool not found",
@@ -104,10 +109,8 @@ const SwapComponent = () => {
         setValue={setTokenBVal}
         setValueSelf={setTokenAVal}
         loading={loading}
-        baseToken={baseToken}
-        swapToken={swapToken}
-        setBaseToken={setBaseToken}
-        setSwapToken={setSwapToken}
+        setDisabled={setDisabled}
+        setButtonMsg={setButMsg}
       />
       <ArrowDownOutlined />
       <TokenInput
@@ -119,13 +122,17 @@ const SwapComponent = () => {
         setValue={setTokenAVal}
         setValueSelf={setTokenBVal}
         loading={loading}
-        baseToken={baseToken}
-        swapToken={swapToken}
-        setBaseToken={setBaseToken}
-        setSwapToken={setSwapToken}
+        setDisabled={setDisabled}
+        setButtonMsg={setButMsg}
       />
-      <Button type="primary" size="large" onClick={swap} loading={loading}>
-        Swap
+      <Button
+        type="primary"
+        size="large"
+        onClick={swap}
+        loading={loading}
+        disabled={disabled}
+      >
+        {buttonMsg}
       </Button>
     </Card>
   );

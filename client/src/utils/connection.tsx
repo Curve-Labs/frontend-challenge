@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Web3 from "web3";
+import useTokens from "../utils/useTokens";
 // Types
 import { ConnectionContextValues } from "./types";
 // Contracts
@@ -18,8 +19,30 @@ const ConnectionContext = React.createContext<ConnectionContextValues | null>(
 export function ConnectionProvider({ children }) {
   // Get web3
   const { web3, accounts } = useWeb3();
+  // Get the tokens
+  const {
+    tokens,
+    tokenPair,
+    setTokenPair,
+    baseToken,
+    setBaseToken,
+    swapToken,
+    setSwapToken,
+  } = useTokens();
   return (
-    <ConnectionContext.Provider value={{ web3, accounts }}>
+    <ConnectionContext.Provider
+      value={{
+        web3,
+        accounts,
+        tokens,
+        baseToken,
+        swapToken,
+        setBaseToken,
+        setSwapToken,
+        tokenPair,
+        setTokenPair,
+      }}
+    >
       {children}
     </ConnectionContext.Provider>
   );
@@ -47,7 +70,20 @@ const useWeb3 = () => {
 // Connection hook
 export const useConnection = () => {
   const connection = useContext(ConnectionContext);
-  return { web3: connection?.web3, accounts: connection?.accounts };
+  if (!connection) {
+    throw Error("Connection context not found");
+  }
+  return {
+    web3: connection.web3,
+    accounts: connection.accounts,
+    tokenPair: connection.tokenPair,
+    setTokenPair: connection.setTokenPair,
+    setBaseToken: connection.setBaseToken,
+    setSwapToken: connection.setSwapToken,
+    baseToken: connection.baseToken,
+    swapToken: connection.swapToken,
+    tokens: connection.tokens,
+  };
 };
 // Load the on-chain contracts
 export const useTokenContract = (): Map<
@@ -146,7 +182,6 @@ export const setUp = async (
       poolExists = res["isActive"];
     });
   } catch (err) {
-    console.log("sdsd");
     poolExists = false;
   }
   // TODO: Fix double spending
@@ -154,7 +189,6 @@ export const setUp = async (
     // Pool is active
     return;
   }
-  console.log("Here to setup test");
   // Set up accounts with tokens
   web3.eth.getAccounts().then(async (acc) => {
     // Mint some tokens for account 0

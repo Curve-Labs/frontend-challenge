@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Select, Card, notification } from "antd";
 // TYpe annotations
 import { Token } from "../../utils/types";
@@ -20,10 +20,8 @@ const TokenInput = React.forwardRef(
       setValueSelf: (val: number | undefined) => void;
       setValue: (val: number | undefined) => void;
       loading: boolean; // Are we done swapping ?
-      baseToken: string; // The base token in this swap
-      setBaseToken: (val: string) => void;
-      swapToken: string; // The token to swap to
-      setSwapToken: (val: string) => void;
+      setButtonMsg: (val: string) => void;
+      setDisabled: (val: boolean) => void;
     },
     ref: any
   ) => {
@@ -35,14 +33,19 @@ const TokenInput = React.forwardRef(
       setValue,
       setValueSelf,
       loading,
+      setButtonMsg,
+      setDisabled,
+    } = props;
+    // Get the token pair
+    const { tokenPair } = useTokens();
+    const {
+      web3,
+      accounts,
       baseToken,
       setBaseToken,
       swapToken,
       setSwapToken,
-    } = props;
-    // Get the token pair
-    const { tokenPair } = useTokens();
-    const { web3, accounts } = useConnection();
+    } = useConnection();
     // Hold user balance
     const [balance, setBalance] = useState<{
       balance: string;
@@ -51,7 +54,7 @@ const TokenInput = React.forwardRef(
     // Hold the current token
     const [token, setToken] = useState<string>("");
     // Set the token
-    const settoken = (token: any) => {
+    const settoken = useCallback((token: any) => {
       if (type === "From") {
         // If this is the base token input, set the base token
         setBaseToken(token);
@@ -64,7 +67,7 @@ const TokenInput = React.forwardRef(
         setValue(undefined);
         setValueSelf(undefined);
       }
-    };
+    }, []);
     // Let's create a memoized select and options for each mango group currency
     const createCurrencyOptions = useMemo(() => {
       return (
@@ -106,7 +109,7 @@ const TokenInput = React.forwardRef(
           )}
         </Select>
       );
-    }, [tokens, token]);
+    }, [tokens, settoken]);
 
     // Get the users balance for this token
     const uiBalance = useMemo(() => {
@@ -132,47 +135,48 @@ const TokenInput = React.forwardRef(
     }, [contracts, accounts, token, web3, loading]);
 
     // Calculate the excahnge value for the swapped token
-    const getExchangeValue = (value: number) => {
-      // Check that a vallue has been selected
-      if (!value || value <= 0) {
-        setValue(undefined);
-        notification.open({
-          description: "Please input an amount to swap",
-          message: "No Amount selected",
-        });
-        return;
-      } else if (value > Number(balance.balance)) {
-        // check that the input value is less than balance
-        setValue(undefined);
-        notification.open({
-          description: "Please input an amount less than your wallet",
-          message: "Insufficient Funds",
-        });
-        return;
-      }
-
-      // Let's get the exchange rate from the pool
-      let contract = contracts?.get("tokenSwap")?.contract;
-      contract.methods.pools(0).call((err: any, res: any) => {
-        let swapVal = 0;
-        console.log(
-          token,
-          // @ts-ignore
-          tokenPair.get(baseToken + "/" + swapToken)?.baseToken
-        );
-        if (
-          tokenPair &&
-          token === tokenPair.get(baseToken + "/" + swapToken)?.baseToken
-        ) {
-          swapVal = (value * Number(res["exchageRate"])) / 1000000;
-        } else {
-          swapVal = value / (Number(res["exchageRate"]) / 1000000);
+    const getExchangeValue = useCallback(
+      (value: number) => {
+        // Confirm toke has been set
+        if (!baseToken || !swapToken || baseToken === swapToken) {
+          setValue(undefined);
+          setButtonMsg("Select a token");
+          setDisabled(true);
+          return;
         }
-        // @ts-ignore
-        setValue(swapVal);
-      });
-      // Now perfrom the swap
-    };
+        // Check that a vallue has been selected
+        if (!value || value <= 0) {
+          setValue(undefined);
+          setButtonMsg("Enter an amount");
+          setDisabled(true);
+          return;
+        } else if (value > Number(balance.balance)) {
+          // check that the input value is less than balance
+          setButtonMsg("Insufficient funds");
+          setDisabled(true);
+        } else {
+          setButtonMsg("Swap");
+          setDisabled(false);
+        }
+        // Let's get the exchange rate from the pool
+        let contract = contracts?.get("tokenSwap")?.contract;
+        contract.methods.pools(0).call((err: any, res: any) => {
+          let swapVal = 0;
+          if (
+            tokenPair &&
+            token === tokenPair.get(baseToken + "/" + swapToken)?.baseToken
+          ) {
+            swapVal = (value * Number(res["exchageRate"])) / 1000000;
+          } else {
+            swapVal = value / (Number(res["exchageRate"]) / 1000000);
+          }
+          // @ts-ignore
+          setValue(swapVal);
+        });
+        // Now perfrom the swap
+      },
+      [baseToken, swapToken, contracts]
+    );
     // Create a memoized currency input
     const NumInput = useMemo(
       () => (
@@ -190,7 +194,7 @@ const TokenInput = React.forwardRef(
           setValue={setValueSelf}
         />
       ),
-      [ref, value, setValueSelf, contracts]
+      [ref, value, setValueSelf, getExchangeValue]
     );
     return (
       <Card
