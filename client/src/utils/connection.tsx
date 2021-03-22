@@ -6,6 +6,7 @@ import { ConnectionContextValues } from "./types";
 import TestTokenA from "../build/TestTokenA.json";
 import TestTokenB from "../build/TestTokenB.json";
 import TokenSwap from "../build/TokenSwap.json";
+import { notification } from "antd";
 
 // Connection context
 const ConnectionContext = React.createContext<ConnectionContextValues | null>(
@@ -110,11 +111,10 @@ export const useTokenContract = (): Map<
 };
 
 // Set up test -- run just once
-export const setUp = (
+export const setUp = async (
   contracts: Map<string, { contract: any; address: string }> | null,
   web3: Web3 | null
 ) => {
-  console.log("Here to setup test");
   if (!contracts || !web3) {
     return;
   }
@@ -125,7 +125,36 @@ export const setUp = (
   let addressB = contracts.get("tokenB")?.address;
   let tokenSwap = contracts.get("tokenSwap")?.contract;
   let addressC = contracts.get("tokenSwap")?.address;
-
+  // Check it pool already exists
+  let poolExists = false;
+  try {
+    await tokenSwap.methods.pools(0).call((err: any, res: any) => {
+      if (err) {
+        notification.open({
+          description: "Could not send transaction to contract",
+          message: "Error Ocurred",
+          type: "error",
+        });
+        poolExists = true;
+        return;
+      }
+      if (!res) {
+        // No pool
+        poolExists = false;
+        return;
+      }
+      poolExists = res["isActive"];
+    });
+  } catch (err) {
+    console.log("sdsd");
+    poolExists = false;
+  }
+  // TODO: Fix double spending
+  if (poolExists) {
+    // Pool is active
+    return;
+  }
+  console.log("Here to setup test");
   // Set up accounts with tokens
   web3.eth.getAccounts().then(async (acc) => {
     // Mint some tokens for account 0
@@ -149,6 +178,9 @@ export const setUp = (
     await tokenbContract.methods
       .approve(addressC, web3.utils.toWei("10000"))
       .send({ from: acc[0] });
+    await tokenbContract.methods
+      .approve(addressC, web3.utils.toWei("10000"))
+      .send({ from: acc[1] });
     // Create a pool for token A and B
     await tokenSwap.methods
       .createPool(
@@ -160,5 +192,6 @@ export const setUp = (
         web3.utils.toBN(2 * 1000000)
       )
       .send({ from: acc[0], gas: 7984452, gasPrice: 2000000000 });
+    // Get the pool provider
   });
 };

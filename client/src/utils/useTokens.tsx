@@ -4,6 +4,10 @@ import { Token } from "./types";
 // Hook to handle the tokens swapable
 const useTokens = () => {
   const [tokens, setTokens] = useState<Array<Token> | []>([]);
+  // Token pair
+  const [tokenPair, setTokenPair] = useState<
+    Map<string, { baseToken: string; pool: any }>
+  >();
   // Get our tokens
   useEffect(() => {
     setTokens([
@@ -16,8 +20,12 @@ const useTokens = () => {
         mintAddress: "1234455",
       },
     ]);
+    let mapping = new Map<string, { baseToken: string; pool: any }>();
+    mapping.set("tokenA/tokenB", { baseToken: "tokenA", pool: null });
+    mapping.set("tokenB/tokenA", { baseToken: "tokenA", pool: null });
+    setTokenPair(mapping);
   }, []);
-  return { tokens };
+  return { tokens, tokenPair, setTokenPair };
 };
 
 export default useTokens;

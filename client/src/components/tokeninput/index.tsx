@@ -7,6 +7,7 @@ import { useConnection } from "../../utils/connection";
 import { NumericInput } from "../numericinput";
 // Style
 import "../../styles/tokeninput.css";
+import useTokens from "../../utils/useTokens";
 const { Option } = Select;
 // Our token input
 const TokenInput = React.forwardRef(
@@ -18,18 +19,51 @@ const TokenInput = React.forwardRef(
       value: number | undefined;
       setValueSelf: (val: number | undefined) => void;
       setValue: (val: number | undefined) => void;
+      loading: boolean; // Are we done swapping ?
+      baseToken: string; // The base token in this swap
+      setBaseToken: (val: string) => void;
+      swapToken: string; // The token to swap to
+      setSwapToken: (val: string) => void;
     },
     ref: any
   ) => {
-    const { tokens, type, contracts, value, setValue, setValueSelf } = props;
+    const {
+      tokens,
+      type,
+      contracts,
+      value,
+      setValue,
+      setValueSelf,
+      loading,
+      baseToken,
+      setBaseToken,
+      swapToken,
+      setSwapToken,
+    } = props;
+    // Get the token pair
+    const { tokenPair } = useTokens();
     const { web3, accounts } = useConnection();
-    // Hod user balance
-    const [balance, setBalance] = useState<String>("0");
+    // Hold user balance
+    const [balance, setBalance] = useState<{
+      balance: string;
+      uiBalance: string;
+    }>({ balance: "0", uiBalance: "0" });
     // Hold the current token
     const [token, setToken] = useState<string>("");
     // Set the token
     const settoken = (token: any) => {
-      setToken(token);
+      if (type === "From") {
+        // If this is the base token input, set the base token
+        setBaseToken(token);
+        setToken(token);
+        setValue(undefined);
+        setValueSelf(undefined);
+      } else {
+        setSwapToken(token);
+        setToken(token);
+        setValue(undefined);
+        setValueSelf(undefined);
+      }
     };
     // Let's create a memoized select and options for each mango group currency
     const createCurrencyOptions = useMemo(() => {
@@ -72,25 +106,30 @@ const TokenInput = React.forwardRef(
           )}
         </Select>
       );
-    }, [tokens]);
+    }, [tokens, token]);
 
     // Get the users balance for this token
     const uiBalance = useMemo(() => {
       if (accounts && token && contracts && web3) {
+        if (loading) {
+          return;
+        }
         let contract = contracts.get(token)?.contract;
         // Return the amount of tokens this account has
-        return contract.methods
+        contract.methods
           .balanceOf(accounts[1])
           .call((err: any, res: string) => {
             if (err) {
               console.error(err);
               return;
             }
-            setBalance(web3.utils.fromWei(res, "ether"));
+            setBalance({
+              balance: web3.utils.fromWei(res, "ether"),
+              uiBalance: Number(web3.utils.fromWei(res, "ether")).toFixed(2),
+            });
           });
       }
-      return 0;
-    }, [contracts, accounts, token, web3]);
+    }, [contracts, accounts, token, web3, loading]);
 
     // Calculate the excahnge value for the swapped token
     const getExchangeValue = (value: number) => {
@@ -102,7 +141,7 @@ const TokenInput = React.forwardRef(
           message: "No Amount selected",
         });
         return;
-      } else if (value > Number(balance)) {
+      } else if (value > Number(balance.balance)) {
         // check that the input value is less than balance
         setValue(undefined);
         notification.open({
@@ -115,11 +154,22 @@ const TokenInput = React.forwardRef(
       // Let's get the exchange rate from the pool
       let contract = contracts?.get("tokenSwap")?.contract;
       contract.methods.pools(0).call((err: any, res: any) => {
-        // @ts-ignore
-        setValue(
+        let swapVal = 0;
+        console.log(
+          token,
           // @ts-ignore
-          (value * Number(res["exchageRate"])) / 1000000
+          tokenPair.get(baseToken + "/" + swapToken)?.baseToken
         );
+        if (
+          tokenPair &&
+          token === tokenPair.get(baseToken + "/" + swapToken)?.baseToken
+        ) {
+          swapVal = (value * Number(res["exchageRate"])) / 1000000;
+        } else {
+          swapVal = value / (Number(res["exchageRate"]) / 1000000);
+        }
+        // @ts-ignore
+        setValue(swapVal);
       });
       // Now perfrom the swap
     };
@@ -150,7 +200,9 @@ const TokenInput = React.forwardRef(
       >
         <div className="ccy-input-header">
           <div className="ccy-input-header-left">{type}</div>
-          <div className="ccy-input-header-right">Balance: {balance}</div>
+          <div className="ccy-input-header-right">
+            Balance: {balance.uiBalance}
+          </div>
         </div>
         <div
           className="ccy-input-header"
