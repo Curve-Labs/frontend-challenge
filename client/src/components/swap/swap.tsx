@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Button, Card, notification } from "antd";
+import { Button, Card, notification, Typography } from "antd";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import "../../styles/swap.css";
 // Hooks
 import TokenInput from "../tokeninput";
 import { useTokenContract, useConnection, setUp } from "../../utils/connection";
 
+// Get text
+const { Text } = Typography;
 const SwapComponent = () => {
   // Get our web3 instance and tokens
   const {
@@ -99,7 +101,20 @@ const SwapComponent = () => {
   }, [contracts, web3]);
 
   return (
-    <Card title="Swap" className="card" bordered={false}>
+    <Card
+      title="Swap"
+      extra={
+        <Text code strong>
+          {accounts.length > 0
+            ? accounts[1].toString().substr(0, 6) +
+              "..." +
+              accounts[1].toString().substr(-4)
+            : "Connect Wallet"}
+        </Text>
+      }
+      className="card"
+      bordered={false}
+    >
       <TokenInput
         tokens={tokens || []}
         type="From"
@@ -112,7 +127,7 @@ const SwapComponent = () => {
         setDisabled={setDisabled}
         setButtonMsg={setButMsg}
       />
-      <ArrowDownOutlined />
+      <ArrowDownOutlined style={{ color: "green" }} />
       <TokenInput
         tokens={tokens}
         type="To (estimated) "

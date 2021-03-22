@@ -15,7 +15,7 @@
   display: none;
 }
 .token-balance {
-  color: grey;
+  color: rgb(129, 126, 126);
 }
 .ccy-input-header {
   display: grid;
@@ -26,6 +26,7 @@
   -webkit-box-align: center;
   align-items: center;
   flex-direction: row;
+  font-size: calc(0.6vw + 14px);
   padding: 10px 20px 0px 20px;
 }
 .ccy-input-header-left {

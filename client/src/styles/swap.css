@@ -1,9 +1,9 @@
 .card {
-  width: 30vw;
-  border-radius: 20px;
+  width: auto;
+  box-shadow: 2px 2px 2px grey;
 }
-
-.ant-card {
+.ant-card-head-title {
+  font-size: calc(10px + 2vmin);
   border-radius: 30px;
 }
 

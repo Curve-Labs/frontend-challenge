@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Select, Card, notification } from "antd";
+import { Select, Card } from "antd";
 // TYpe annotations
 import { Token } from "../../utils/types";
 // Connection hooks
@@ -182,7 +182,8 @@ const TokenInput = React.forwardRef(
       () => (
         <NumericInput
           style={{
-            fontSize: 20,
+            fontSize: "calc(0.2vw+13px)",
+            fontWeight: "600",
             boxShadow: "none",
             borderColor: "transparent",
             outline: "transpaernt",
