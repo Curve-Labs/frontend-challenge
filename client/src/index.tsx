@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './style.min.css'
 import Routes from './Routes';
 import reportWebVitals from './reportWebVitals';
+import ThemeWrapper from './pages/components/ThemeWrapper';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ThemeWrapper>
     <Routes />
-  </React.StrictMode>,
+  </ThemeWrapper>,
   document.getElementById('root')
 );
 
