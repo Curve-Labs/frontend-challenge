@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "bn.js": "^5.1.2",
+    "openzeppelin-solidity": "^2.0.0"
+  }
+}
