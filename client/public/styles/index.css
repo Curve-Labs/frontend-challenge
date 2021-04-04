@@ -20,137 +20,46 @@
   border: 1px solid transparent;
 }
 
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	line-height: 1;
 }
-body.body-no-overflow {
-  overflow: hidden;
+ol, ul {
+	list-style: none;
 }
-html {
-  margin: 0;
-  padding: 0;
+blockquote, q {
+	quotes: none;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
 }
-
-.font9 {
-  font-size: 9px;
-}
-.font12 {
-  font-size: 12px;
-}
-.font14 {
-  font-size: 14px;
-}
-.font16 {
-  font-size: 16px;
-}
-.font18 {
-  font-size: 18px;
-}
-.font21 {
-  font-size: 21px;
-}
-.font24 {
-  font-size: 24px;
-}
-.font36 {
-  font-size: 36px;
-}
-.font42 {
-  font-size: 42px;
-}
-
-.semi-bold {
-  font-weight: 600;
-}
-.bold {
-  font-weight: 700;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
-}
-.uppercase {
-  text-transform: uppercase;
-}
-.capitalize {
-  text-transform: capitalize;
-}
-
-.flex {
-  display: flex;
-}
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-.flex-wrap {
-  flex-wrap: wrap;
-}
-.justify-center {
-  justify-content: center;
-}
-.justify-end {
-  justify-content: flex-end;
-}
-.justify-space-between {
-  justify-content: space-between;
-}
-.align-center {
-  align-items: center;
-}
-
-.mt1 {
-  margin-top: 10px;
-}
-.mt2 {
-  margin-top: 20px;
-}
-.mt5 {
-  margin-top: 50px;
-}
-.mb2 {
-  margin-bottom: 20px;
-}
-.mb5 {
-  margin-bottom: 50px;
-}
-
-.pt5 {
-  padding-top: 50px;
-}
-
-.w1 {
-  width: 10px;
-}
-.w2 {
-  width: 20px;
-}
-.button-primary{
-  background: -webkit-linear-gradient(95.81deg, #2042B8 -4.73%, #FF6600 157.32%);
-  background: linear-gradient(95.81deg, #2042B8 -4.73%, #FF6600 157.32%);
-  color:white;
-  cursor: pointer;
-  display: inline-block;
-  border:none;
-  padding:10px 30px;
-  font-size: 18px;
-  border-radius: 10px;
-  font-weight: 600;
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
