@@ -1,75 +1,75 @@
 import React, { useEffect, useState } from 'react';
-import { retrieveTheme, updateThemeSelection } from '../../utils/theme-settings';
 
-const themes: any = {
-  dark: {
-    backgroundColor: "#1d1d1d",
-    primaryColor: "#2A2A2A",
-    strokeColor: "#3C3C3C",
-    fontColor: "#EDEDED",
-  },
-  light: {
-    backgroundColor: "#EBEBEB",
-    primaryColor: "#fff",
-    strokeColor: "#F2DADA",
-    fontColor: "#363636",
-  }
-}
 
 type Props = {
   children: React.ReactNode
 }
 
-export default function (props: Props) {
 
-  const savedTheme = retrieveTheme();
+export const ThemeContext = React.createContext({
+  theme: "light",
+  toggle: () => { }
+})
 
-  const [themeName, setThemeName] = useState("light");
-  const [theme, setTheme] = useState(themes[themeName]);
 
-  function toggleTheme() {
-    if (theme === themes.dark) {
-      setTheme(themes.light);
-      setThemeName("light")
+
+
+
+
+function ThemeWrapper(props: Props) {
+
+  const [theme, setTheme] = useState("light");
+  const [activeTheme, setActiveTheme] = useState(themes[theme])
+
+
+
+  const toggle = () => {
+    if (activeTheme === themes.dark) {
+      setTheme("light");
+      setActiveTheme(themes.light)
     } else {
-      setTheme(themes.dark);
-      setThemeName("dark")
+      setTheme("dark");
+      setActiveTheme(themes.dark)
     }
   }
 
-  function setCSSVariables(theme: any) {
+
+
+
+  const setCSSVariables = (theme: any) => {
     for (const value in theme) {
       document.documentElement.style.setProperty(`--${value}`, theme[value]);
     }
   }
 
   useEffect(() => {
-    if (savedTheme === 'dark') {
-      setTheme(themes.dark);
-      setThemeName("dark");
-    } else {
-      setTheme(themes.light);
-      setThemeName("light");
-    }
+    setCSSVariables(activeTheme);
     // eslint-disable-next-line
-  }, [])
+  }, [theme])
 
-  useEffect(() => {
-    setCSSVariables(theme);
-    updateThemeSelection(themeName);
-    // eslint-disable-next-line
-  })
 
   return (
-    <ThemeSelectorContext.Provider value={{ toggleTheme, themeName }}>
+    <ThemeContext.Provider value={{ theme, toggle }}>
       {props.children}
-    </ThemeSelectorContext.Provider>
+    </ThemeContext.Provider>
   )
 }
 
+export default ThemeWrapper;
 
 
-export const ThemeSelectorContext = React.createContext({
-  themeName: "dark",
-  toggleTheme: () => { }
-})
+const themes: any = {
+
+  light: {
+    appBackground: "linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%)",
+    swapper: "#fff",
+    font: "#333"
+  },
+
+  dark: {
+    appBackground: "linear-gradient(to right, #141e30, #243b55)",
+    swapper: "#333",
+    font: "#f2f2f2"
+  }
+
+}
