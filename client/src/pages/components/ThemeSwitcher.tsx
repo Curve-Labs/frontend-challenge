@@ -11,14 +11,16 @@ function ThemeSwitcher() {
     return (
       <section
         style={{
-          backgroundColor: "#2D2D2D",
-          padding: 15,
-          borderTop: "1px solid var(--strokeColor)"
+          backgroundColor: "#565A69",
+          height:50,
+          display:'flex',
+          alignItems:'center',
+          width:50,
+          padding: 10,
+         borderRadius:10,
         }}
         className="flex cursor-pointer align-items justify-center" onClick={toggleTheme}>
         <img src={lightIcon} />
-        <div className="w1"></div>
-        <span>Light</span>
       </section>
     )
   }
@@ -27,14 +29,17 @@ function ThemeSwitcher() {
     return (
       <section
         style={{
-          backgroundColor: "#fff",
-          padding: 15,
-          borderTop: "1px solid var(--strokeColor)"
+          backgroundColor: "#565A69",
+          height:50,
+          display:'flex',
+          alignItems:'center',
+          width:50,
+          padding: 10,
+          borderRadius:10,
         }}
         className="flex cursor-pointer align-items justify-center" onClick={toggleTheme}>
         <img src={darkIcon} />
-        <div className="w1"></div>
-        <span>Dark</span>
+       
       </section>
     )
   }

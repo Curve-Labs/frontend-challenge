@@ -1,12 +1,13 @@
 import React,{useContext} from 'react'
-import ThemeSwitcher from './components/ThemeSwitcher';
+import Navbar from './components/Navbar';
 import { ThemeSelectorContext } from './components/ThemeWrapper';
 
  function Home() {
     const { themeName } = useContext(ThemeSelectorContext);
     return (
         <div className="">
-            <ThemeSwitcher />
+            <Navbar/>
+           
         </div>
     )
 }

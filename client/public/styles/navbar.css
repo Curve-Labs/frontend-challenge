@@ -1,0 +1,13 @@
+.nav-style {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-style > ul{
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+.nav-style .nav-style-secondary {
+
+}

@@ -56,7 +56,7 @@ export default function (props: Props) {
 
   useEffect(() => {
     setCSSVariables(theme);
-    updateThemeSelection(themeName)
+    updateThemeSelection(themeName);
     // eslint-disable-next-line
   })
 

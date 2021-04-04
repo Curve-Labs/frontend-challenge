@@ -142,3 +142,15 @@ code {
 .w2 {
   width: 20px;
 }
+.button-primary{
+  background: -webkit-linear-gradient(95.81deg, #2042B8 -4.73%, #FF6600 157.32%);
+  background: linear-gradient(95.81deg, #2042B8 -4.73%, #FF6600 157.32%);
+  color:white;
+  cursor: pointer;
+  display: inline-block;
+  border:none;
+  padding:10px 30px;
+  font-size: 18px;
+  border-radius: 10px;
+  font-weight: 600;
+}
