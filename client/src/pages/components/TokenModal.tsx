@@ -49,7 +49,7 @@ function TokenSelect(props: Props) {
                   <li key={i}>
                     <button onClick={() => selectToken(item)}>
                       <figure>
-                        <img src="https://app.uniswap.org/static/media/logo.742edb09.svg" alt="" />
+                        <img src={item.logo} alt="" />
                       </figure>
                       <div>
                         <p className="token-name">{item.name}</p>
@@ -73,12 +73,12 @@ export default TokenSelect;
 
 const tokens = [
   {
-    logo: "",
+    logo: Logo,
     name: "Token A",
     desc: "Token A"
   },
   {
-    logo: "",
+    logo: Logo,
     name: "Token B",
     desc: "Token B"
   },
