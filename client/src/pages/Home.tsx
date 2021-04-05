@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from './components/ThemeWrapper';
 import TokenModal from './components/TokenModal';
 import TokenSelect from './components/TokenModal';
+import Logo from '../images/logo.png'
 
 function Home() {
 
@@ -19,11 +20,11 @@ function Home() {
     <div className="Home">
       <header className="Home-header">
         <figure>
-          <img src="https://app.uniswap.org/static/media/logo.742edb09.svg" alt="" />
+          <img src={Logo} style={{width:35}} alt="logo" />
         </figure>
         <ul>
           <li>
-            <a href="#">Swap</a>
+            <a href="#">ZSwap</a>
           </li>
          
         </ul>
@@ -38,9 +39,7 @@ function Home() {
               <span className="material-icons">dark_mode</span>
           }
         </button>
-        <button>
-          <span className="material-icons">more_horiz</span>
-        </button>
+  
       </section>
       <main>
 
@@ -83,14 +82,11 @@ export default Home;
 const tokens = [
   {
     logo: "",
-    name: "ETH"
+    name: "Token A"
   },
   {
     logo: "",
-    name: "ANT"
+    name: "Token B"
   },
-  {
-    logo: "",
-    name: "AAVE"
-  },
+
 ]

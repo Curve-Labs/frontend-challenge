@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Logo from '../../images/logo.png'
 
 type Props = {
   token: any
@@ -27,7 +28,7 @@ function TokenSelect(props: Props) {
           </button> :
           <button onClick={() => setVisible(true)} className="selected-token">
             <figure>
-              <img src="https://app.uniswap.org/static/media/logo.742edb09.svg" alt="" />
+              <img src={Logo} alt="" />
             </figure>
             <p>{token.name}</p>
           </button>
@@ -73,17 +74,13 @@ export default TokenSelect;
 const tokens = [
   {
     logo: "",
-    name: "ETH",
-    desc: "Ethereum coin"
+    name: "Token A",
+    desc: "Token A"
   },
   {
     logo: "",
-    name: "ANT",
-    desc: "Ant coin"
+    name: "Token B",
+    desc: "Token B"
   },
-  {
-    logo: "",
-    name: "AAVE",
-    desc: "Aave coin here"
-  },
+
 ]

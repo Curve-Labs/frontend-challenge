@@ -63,13 +63,25 @@ const themes: any = {
   light: {
     appBackground: "linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%)",
     swapper: "#fff",
-    font: "#333"
+    font: "#333",
+    buttonColor: "#b3008f",
+    buttonBackground: "#ffe6fa",
+    selectToken: "#b3008f",
+    stroke: "#ddd",
+    selection: "",
+    links: "#333"
   },
 
   dark: {
     appBackground: "linear-gradient(to right, #141e30, #243b55)",
-    swapper: "#333",
-    font: "#f2f2f2"
+    swapper: "#141e30",
+    font: "#f2f2f2",
+    buttonColor: "#c6d5e7",
+    buttonBackground: "#243b55",
+    selectToken: "#007bff",
+    stroke: "#555",
+    selection: "",
+    links: "#f2f2f2"
   }
 
 }
