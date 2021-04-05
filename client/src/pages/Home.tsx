@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import  {ThemeContext} from './components/ThemeWrapper';
-
+import { ThemeContext } from './components/ThemeWrapper';
+import TokenModal from './components/TokenModal';
+import TokenSelect from './components/TokenModal';
 
 function Home() {
 
   const { theme, toggle } = useContext(ThemeContext);
   const [from, setFrom] = useState<any>({});
   const [to, setTo] = useState<any>({});
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setFrom(tokens[0]);
@@ -24,19 +26,24 @@ function Home() {
             <a href="#">Swap</a>
           </li>
          
-          <li className="charts">
-            <a href="#">Charts</a>
-          </li>
         </ul>
       </header>
       <section className="wallet">
-        <button>Connect wallet</button>
+        <button className="z-swap">ZSwap</button>
+        <button className="connect-wallet">Connect wallet</button>
         <button onClick={toggle}>
-          <span className="material-icons">light_mode</span>
-          <span className="material-icons">dark_mode</span>
+          {
+            theme === "light" ?
+              <span className="material-icons">light_mode</span> :
+              <span className="material-icons">dark_mode</span>
+          }
+        </button>
+        <button>
+          <span className="material-icons">more_horiz</span>
         </button>
       </section>
       <main>
+
         <section className="swapper">
           <div>
             <h1>Swap</h1>
@@ -46,16 +53,7 @@ function Home() {
             <h3>From</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            {
-              from && Object.keys(from).length === 0 ?
-                <button>Select a token</button> :
-                <button className="selected-token">
-                  <figure>
-                    <img src="https://app.uniswap.org/static/media/logo.742edb09.svg" alt="" />
-                  </figure>
-                  <p>{from.name}</p>
-                </button>
-            }
+            <TokenSelect token={from} selected={setFrom} />
           </section>
 
           <div>
@@ -67,16 +65,7 @@ function Home() {
             <h3>To</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            {
-              to && Object.keys(to).length === 0 ?
-                <button>Select a token</button> :
-                <button className="selected-token">
-                  <figure>
-                    <img src="https://app.uniswap.org/static/media/logo.742edb09.svg" alt="" />
-                  </figure>
-                  <p>{to.name}</p>
-                </button>
-            }
+            <TokenSelect token={to} selected={setTo} />
           </section>
 
           <section>
