@@ -59,7 +59,7 @@ function ConnectModal(props: Props) {
                 <div>
                     <div className={`modal-content ${content}`} ref={modalbody}>
                         <div className="flex justify-space-between align-center">
-                            <div className="title font18" style={{ fontWeight: 500 }}>
+                            <div className="modal-title" style={{ fontWeight: 500 }}>
                                 {props.title}
                             </div>
                             <div onClick={() => props.onCancel()} className="close-modal">

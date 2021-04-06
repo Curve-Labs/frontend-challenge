@@ -27,6 +27,7 @@
   }
   
   
+  
   .modal-body.show {
     opacity:1;
   }
@@ -57,7 +58,7 @@
     bottom: 0;
   }
   
-  .modal-content .title {
+  .modal-content .modal-title {
     font-size: 18px;
   }
   

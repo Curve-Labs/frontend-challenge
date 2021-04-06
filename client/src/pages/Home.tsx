@@ -3,6 +3,7 @@ import { ThemeContext } from './components/ThemeWrapper';
 import TokenModal from './components/TokenModal';
 import TokenSelect from './components/TokenModal';
 import Logo from '../images/logo.png'
+import ConnectModal from './components/ConnectModal';
 
 function Home() {
 
@@ -10,6 +11,11 @@ function Home() {
   const [from, setFrom] = useState<any>({});
   const [to, setTo] = useState<any>({});
   const [visible, setVisible] = useState(false);
+
+
+    function openConnectionModal() {
+      setVisible(true);
+    }
 
   useEffect(() => {
     setFrom(tokens[0]);
@@ -31,7 +37,7 @@ function Home() {
       </header>
       <section className="wallet">
         <button className="z-swap">ZSwap</button>
-        <button className="connect-wallet">Connect wallet</button>
+        <button className="connect-wallet" onClick={openConnectionModal}>Connect wallet</button>
         <button onClick={toggle}>
           {
             theme === "light" ?
@@ -68,9 +74,12 @@ function Home() {
           </section>
 
           <section>
-            <button className="submit-button">Connect Wallet</button>
+            <button className="submit-button" onClick={openConnectionModal}>Connect Wallet</button>
           </section>
         </section>
+        <ConnectModal visible={visible} title="Connect Wallet" onCancel={() => setVisible(false)}>
+          <div></div>
+        </ConnectModal>
       </main>
     </div>
   );
