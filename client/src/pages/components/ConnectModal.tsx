@@ -58,7 +58,7 @@ function ConnectModal(props: Props) {
             <div className={`modal-body ${show}`}>
                 <div>
                     <div className={`modal-content ${content}`} ref={modalbody}>
-                        <div className="flex justify-space-between align-center">
+                        <div className="flex justify-space-between align-center mb2">
                             <div className="modal-title" style={{ fontWeight: 500 }}>
                                 {props.title}
                             </div>

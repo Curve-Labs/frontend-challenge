@@ -44,7 +44,7 @@
   
   .modal-content {
     position: relative;
-    background-color: var(--backgroundColor);
+    background: var(--appBackground);
     border-radius: 5px;
     box-shadow: 0 10px 20px #0000002f;
     padding:30px;
