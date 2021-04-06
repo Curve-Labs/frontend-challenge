@@ -6,6 +6,7 @@ import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
 import metamask from "../images/metamask.svg";
 
+
 function Home() {
   const { theme, toggle } = useContext(ThemeContext);
   const [from, setFrom] = useState<any>({});
@@ -14,6 +15,33 @@ function Home() {
 
   function openConnectionModal() {
     setVisible(true);
+  }
+
+  const handleTokenSelection = (token:any, dest:"from"|"to", callback?:Function) => {
+    if(dest === "from"){
+      if(token.name === to.name){
+        // switch the tokens
+        const currentFrom = from;
+        setFrom(to);
+        setTo(currentFrom);
+      } else {
+        setFrom(token);
+      }
+      callback && callback();
+    }
+
+    if(dest === "to"){
+      if(token.name === from.name){
+        // switch the tokens
+        const currentTo = to;
+        setTo(from);
+        setFrom(currentTo);
+      } else {
+        setTo(token);
+      }
+      callback && callback();
+    }
+
   }
 
   useEffect(() => {
@@ -56,20 +84,20 @@ function Home() {
             <h3>From</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            <TokenSelect token={from} selected={setFrom} />
+            <TokenSelect name="from" token={from} selected={handleTokenSelection} nonSelectToken={to.name} />
           </section>
 
           <div>
-            <span className="material-icons arrow-downward">
+            {/* <span className="material-icons arrow-downward">
               arrow_downward
-            </span>
+            </span> */}
           </div>
 
           <section className="swaps">
             <h3>To</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            <TokenSelect token={to} selected={setTo} />
+            <TokenSelect name="to" token={to} selected={handleTokenSelection} nonSelectToken={from.name} />
           </section>
 
           <section>

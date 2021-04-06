@@ -225,8 +225,13 @@ main {
   transition: all 300ms ease-in-out;
 }
 
-.token-selection button:hover {
+.token-selection button:hover:not(:disabled) {
   background-color: #fff;
+}
+
+.token-selection button.choosen {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .token-selection button img {

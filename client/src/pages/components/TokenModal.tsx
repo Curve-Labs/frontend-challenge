@@ -3,18 +3,22 @@ import Logo from '../../images/logo.png'
 
 type Props = {
   token: any
+  name:"from"|"to"
+  nonSelectToken?:string
   selected?: Function
 }
 
 function TokenSelect(props: Props) {
-  const { token, selected } = props;
+  const { token, name, selected, nonSelectToken } = props;
   const [visible, setVisible] = useState(false);
 
 
   const selectToken = (data: any) => {
-    selected && selected(data);
-    setVisible(false);
+    selected && selected(data, name, () => setVisible(false));
   }
+
+  const selectDisabled = (tokenName:string) => tokenName === token.name;
+const selectChoosen = (tokenName:string) => tokenName === nonSelectToken || tokenName === token.name;
 
 
   return (
@@ -47,7 +51,7 @@ function TokenSelect(props: Props) {
               {
                 tokens.map((item, i) => (
                   <li key={i}>
-                    <button onClick={() => selectToken(item)}>
+                    <button disabled={selectDisabled(item.name)} onClick={() => selectToken(item)} className={selectChoosen(item.name) ? "choosen":""}>
                       <figure>
                         <img src={item.logo} alt="" />
                       </figure>
@@ -82,5 +86,4 @@ const tokens = [
     name: "Token B",
     desc: "Token B"
   },
-
 ]
