@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "./components/ThemeWrapper";
 import TokenModal from "./components/TokenModal";
+import {connectWallet, disconnect} from '../methods/redux/actions/connect-web3';
+import retrieveAddress from '../utils/retrieve-address';
+import truncateAddress from '../utils/truncate-address';
 import TokenSelect from "./components/TokenModal";
 import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
-import metamask from "../images/metamask.svg";
+import Metamask from "../images/metamask.svg";
 
 
 function Home() {
@@ -127,7 +130,7 @@ function Home() {
             <div className="connection-channels">
               <div
                 onClick={() => {
-                  // dispatch(connectWallet());
+                 // dispatch(connectWallet());
                   setVisible(false); // close the modal
                   // history.push("/");
                 }}
@@ -140,7 +143,7 @@ function Home() {
                     </div>
                   </div>
                   <div>
-                    <img src={metamask} alt="metamask" />
+                    <img src={Metamask} alt="metamask" />
                   </div>
                 </div>
               </div>
