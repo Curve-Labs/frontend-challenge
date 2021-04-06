@@ -265,6 +265,13 @@ main {
   justify-content: flex-end;
   cursor: pointer;
 }
+.connected {
+  background-color: greenyellow;
+  border-radius: 50px;
+  height: 10px;
+  width: 10px;
+  margin-right: 10px;
+}
 
 @media only screen and (max-width: 960px) {
   .App {

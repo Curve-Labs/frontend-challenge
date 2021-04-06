@@ -1,14 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
+import {useHistory} from 'react-router-dom'
 import { ThemeContext } from "./components/ThemeWrapper";
+import { useSelector, useDispatch } from "react-redux";
 import TokenModal from "./components/TokenModal";
-import {connectWallet, disconnect} from '../methods/redux/actions/connect-web3';
-import retrieveAddress from '../utils/retrieve-address';
-import truncateAddress from '../utils/truncate-address';
+import {
+  connectWallet,
+  disconnect,
+} from "../methods/redux/actions/connect-web3";
+import retrieveAddress from "../utils/retrieve-address";
+import _const from "../methods/_const";
+import truncateAddress from "../utils/truncate-address";
 import TokenSelect from "./components/TokenModal";
 import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
 import Metamask from "../images/metamask.svg";
-
 
 function Home() {
   const { theme, toggle } = useContext(ThemeContext);
@@ -19,10 +24,54 @@ function Home() {
   function openConnectionModal() {
     setVisible(true);
   }
+  function addressWork() {
+    const localAddress = retrieveAddress();
+    dispatch({
+      type: _const.ADDRESS,
+      payload: localAddress,
+    });
+  }
 
-  const handleTokenSelection = (token:any, dest:"from"|"to", callback?:Function) => {
-    if(dest === "from"){
-      if(token.name === to.name){
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      window.ethereum.on("accountsChanged", () => {
+        dispatch(connectWallet());
+      });
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      window.ethereum.on("chainChanged", () => {
+        dispatch(connectWallet());
+      });
+    }
+
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    addressWork();
+
+    // eslint-disable-next-line
+  }, []);
+
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+
+  const { address } = useSelector((state: any) => state.ConnectWeb3);
+
+  console.log(address, "address");
+
+  const handleTokenSelection = (
+    token: any,
+    dest: "from" | "to",
+    callback?: Function
+  ) => {
+    if (dest === "from") {
+      if (token.name === to.name) {
         // switch the tokens
         const currentFrom = from;
         setFrom(to);
@@ -33,8 +82,8 @@ function Home() {
       callback && callback();
     }
 
-    if(dest === "to"){
-      if(token.name === from.name){
+    if (dest === "to") {
+      if (token.name === from.name) {
         // switch the tokens
         const currentTo = to;
         setTo(from);
@@ -44,8 +93,7 @@ function Home() {
       }
       callback && callback();
     }
-
-  }
+  };
 
   useEffect(() => {
     setFrom(tokens[0]);
@@ -66,9 +114,16 @@ function Home() {
       </header>
       <section className="wallet">
         <button className="z-swap">ZSwap</button>
-        <button className="connect-wallet" onClick={openConnectionModal}>
-          Connect wallet
-        </button>
+        {address.length === 0 ? (
+          <button className="connect-wallet" onClick={openConnectionModal}>
+            Connect wallet
+          </button>
+        ) : (
+          <button className="connect-wallet" onClick={openConnectionModal}>
+            <div className="connected"></div>
+            {truncateAddress(address)}
+          </button>
+        )}
         <button onClick={toggle}>
           {theme === "light" ? (
             <span className="material-icons">light_mode</span>
@@ -87,7 +142,12 @@ function Home() {
             <h3>From</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            <TokenSelect name="from" token={from} selected={handleTokenSelection} nonSelectToken={to.name} />
+            <TokenSelect
+              name="from"
+              token={from}
+              selected={handleTokenSelection}
+              nonSelectToken={to.name}
+            />
           </section>
 
           <div>
@@ -100,13 +160,24 @@ function Home() {
             <h3>To</h3>
             <h3>Balance</h3>
             <input type="text" placeholder="0.00" />
-            <TokenSelect name="to" token={to} selected={handleTokenSelection} nonSelectToken={from.name} />
+            <TokenSelect
+              name="to"
+              token={to}
+              selected={handleTokenSelection}
+              nonSelectToken={from.name}
+            />
           </section>
 
           <section>
-            <button className="submit-button" onClick={openConnectionModal}>
-              Connect Wallet
-            </button>
+            {address.length === 0 ? (
+              <button className="submit-button" onClick={openConnectionModal}>
+                Connect Wallet
+              </button>
+            ) : (
+              <button className="submit-button" onClick={openConnectionModal}>
+                Swap Token
+              </button>
+            )}
           </section>
         </section>
         <ConnectModal
@@ -130,9 +201,9 @@ function Home() {
             <div className="connection-channels">
               <div
                 onClick={() => {
-                 // dispatch(connectWallet());
+                  dispatch(connectWallet());
                   setVisible(false); // close the modal
-                  // history.push("/");
+                  history.push("/");
                 }}
               >
                 <div className="flex justify-space-between align-center">
@@ -147,6 +218,23 @@ function Home() {
                   </div>
                 </div>
               </div>
+              <button
+                style={{
+                  background: "transparent",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  color: "red",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  dispatch(disconnect());
+                  history.push('/');
+                  setVisible(false);
+                }}
+              >
+                {address.length === 0 ? "" : "Disconnect"}
+              </button>
             </div>
           </>
         </ConnectModal>

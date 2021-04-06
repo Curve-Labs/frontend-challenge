@@ -34,7 +34,6 @@ export const connectWallet = () => async (dispatch: Function) => {
             payload: account,
         });
 
-        dispatch({ type: _const.PRISTINE });
 
     } else {
         Swal.fire({
