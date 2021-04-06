@@ -1,1 +1,6 @@
-export const address = [0]
+const SWAP = {
+  TokenA: "0xc7a842A16DE6729adB40F0e4920FF8B2135493D4",
+  TokenB: "0xCDAF7701168A9431A41CBE8E9ce40d154741b51f",
+  TokenSwap: "0x58eF9D96F73EB26d7D4df029Ba1Ebc26F653D93B",
+};
+export { SWAP };
