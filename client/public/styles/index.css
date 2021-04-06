@@ -145,6 +145,24 @@ video {
 .mb5 {
   margin-bottom: 50px;
 }
+.text-decoration-none {
+  text-decoration: none;
+}
+.link-color {
+  color: #2042b8;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
 /* HTML5 display-role reset for older browsers */
 article,
 aside,
