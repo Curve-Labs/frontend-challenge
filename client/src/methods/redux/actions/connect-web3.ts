@@ -1,7 +1,6 @@
 import Web3Modal from 'web3modal';
 import Web3 from 'web3';
 import saveAddress from '../../../utils/save-address';
-// import retrieveAddress from '../../retrieve-address';
 import removeAddress from '../../../utils/remove-address';
 import _const from '../../_const';
 import Swal from 'sweetalert2';
