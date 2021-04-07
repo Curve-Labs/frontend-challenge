@@ -4,5 +4,6 @@ export default {
     STORAGE_TOKEN: 'axa&sqq_storage',
     PRISTINE : 'PRISTINE',
     ADDRESS : 'ADDRESS',
-    QUEUE :'QUEUE'
+    QUEUE :'QUEUE',
+    PROVIDER : 'http://localhost:8545'
 }

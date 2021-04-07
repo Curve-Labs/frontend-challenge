@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import {useHistory} from 'react-router-dom'
 import { ThemeContext } from "./components/ThemeWrapper";
 import { useSelector, useDispatch } from "react-redux";
-import TokenModal from "./components/TokenModal";
 import {
   connectWallet,
   disconnect,
 } from "../methods/redux/actions/connect-web3";
+import createPool from '../methods/redux/actions/create-pool';
 import retrieveAddress from "../utils/retrieve-address";
 import _const from "../methods/_const";
 import truncateAddress from "../utils/truncate-address";
@@ -53,6 +53,8 @@ function Home() {
 
   useEffect(() => {
     addressWork();
+
+    dispatch(createPool());
 
     // eslint-disable-next-line
   }, []);

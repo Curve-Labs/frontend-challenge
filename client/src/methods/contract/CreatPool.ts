@@ -26,9 +26,11 @@ async function CreatePool() {
     let tokenBSupply = toBigNumber(1500);
 
     let exchangeRate = toBigNumber(2 * PPM);
+    
+    console.log(exchangeRate)
 
     let slippage = toBigNumber(0.01 * PPM);
-
+    console.log(slippage)
     let account = retrieveAddress();
 
     await tokenAContract.methods
