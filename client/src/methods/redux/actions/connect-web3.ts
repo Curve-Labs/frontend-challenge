@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 export const web3Connection = async function () {
   const provider = _const.PROVIDER;
   const web3 = new Web3(provider);
+  const accounts = await web3.eth.getAccounts();
+  console.log(accounts, "accounts")
   return web3;
 };
 

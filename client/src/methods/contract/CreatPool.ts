@@ -1,7 +1,8 @@
 import ContractCreator from "./contract-creator";
-import TokenSwapAbi from "./abi/TokenSwapAbi.json";
-import TokenA from "./abi/TokenA.json";
-import TokenB from "./abi/TokenB.json";
+import TokenSwapAbi from "./build/contracts/TokenSwap.json";
+import TokenA from "./build/contracts/TestTokenA.json";
+import TokenB from "./build/contracts/TestTokenB.json";
+import {web3Connection} from '../redux/actions/connect-web3';
 import { SWAP } from "./addresses";
 import retrieveAddress from "../../utils/retrieve-address";
 import { toBigNumber, fromBigNumber } from "../../utils/bignumber-converter";
@@ -12,14 +13,20 @@ async function CreatePool() {
 
     const INITIAL_TOKEN_BALANCE = toBigNumber(10000);
 
-    let tokenAContract = await ContractCreator(TokenA.abi, SWAP.TokenA);
+    let web3 = await web3Connection();
 
-    let tokenBContract = await ContractCreator(TokenB.abi, SWAP.TokenB);
+    //get net ID
+    let netId = await web3.eth.net.getId();
 
-    let tokenSwapContract = await ContractCreator(
-      TokenSwapAbi.abi,
-      SWAP.TokenSwap
-    );
+    //get the network data for the contracts
+     // @ts-ignore
+    let tokenAContract = await ContractCreator(TokenA.abi, TokenA.networks[String(netId)].address);
+
+    // @ts-ignore
+    let tokenBContract = await ContractCreator(TokenB.abi, TokenB.networks[String(netId)].address);
+
+    // @ts-ignore
+    let tokenSwapContract = await ContractCreator( TokenSwapAbi.abi, TokenSwapAbi.networks[String(netId)].address);
 
     let tokenASupply = toBigNumber(3000);
 
