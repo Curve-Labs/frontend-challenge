@@ -18,7 +18,7 @@ export const connectWallet = () => async (dispatch: Function) => {
   if (typeof window.ethereum !== "undefined") {
     const web3 = await web3Connection();
     const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
+    const account = accounts[1];
 
     saveAddress(account);
 

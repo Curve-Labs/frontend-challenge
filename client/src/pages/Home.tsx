@@ -14,6 +14,8 @@ import TokenSelect from "./components/TokenModal";
 import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
 import Metamask from "../images/metamask.svg";
+import BuyToken from "../methods/contract/GetPool";
+import GetPool from "../methods/contract/GetPool";
 
 function Home() {
   const { theme, toggle } = useContext(ThemeContext);
@@ -60,6 +62,10 @@ function Home() {
   }, []);
 
   const dispatch = useDispatch();
+
+  const onClick = async() =>{
+    await GetPool();
+  }
 
   const history = useHistory();
 
@@ -176,7 +182,7 @@ function Home() {
                 Connect Wallet
               </button>
             ) : (
-              <button className="submit-button" onClick={openConnectionModal}>
+              <button className="submit-button" onClick={onClick}>
                 Swap Token
               </button>
             )}
