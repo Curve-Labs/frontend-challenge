@@ -11,49 +11,63 @@ async function CreatePool() {
   try {
     const PPM = 1000000;
 
-    const INITIAL_TOKEN_BALANCE = toBigNumber(10000);
+    const INITIAL_TOKEN_BALANCE = toBigNumber(20000);
 
     let web3 = await web3Connection();
+
+    let acconts = await web3.eth.getAccounts();
+
+    let secondAccount = acconts[1];
 
     //get net ID
     let netId = await web3.eth.net.getId();
 
     //get the network data for the contracts
      // @ts-ignore
-    let tokenAContract = await ContractCreator(TokenA.abi, TokenA.networks[String(netId)].address);
+     let tokenAContractAddress = TokenA.networks[String(netId)].address
+    let tokenAContract = await ContractCreator(TokenA.abi, tokenAContractAddress);
 
     // @ts-ignore
-    let tokenBContract = await ContractCreator(TokenB.abi, TokenB.networks[String(netId)].address);
+    let tokenBContractAddress = TokenB.networks[String(netId)].address
+    let tokenBContract = await ContractCreator(TokenB.abi, tokenBContractAddress);
 
     // @ts-ignore
-    let tokenSwapContract = await ContractCreator( TokenSwapAbi.abi, TokenSwapAbi.networks[String(netId)].address);
+    let tokenSwapContractAddress = TokenSwapAbi.networks[String(netId)].address
+    let tokenSwapContract = await ContractCreator( TokenSwapAbi.abi, tokenSwapContractAddress);
 
+    //set token a supply
     let tokenASupply = toBigNumber(3000);
 
+    //set token b supply
     let tokenBSupply = toBigNumber(1500);
 
-    let exchangeRate = toBigNumber(2 * PPM);
+    //set exchange rate
+    let exchangeRate = BigInt(2 * PPM);
     
-    console.log(exchangeRate)
-
-    let slippage = toBigNumber(0.01 * PPM);
-    console.log(slippage)
+    //slippage
+    let slippage = BigInt(0.01 * PPM);
+ 
     let account = retrieveAddress();
 
     await tokenAContract.methods
       .mint(account, INITIAL_TOKEN_BALANCE)
       .send({ from: account });
 
+      // Transfer token A to second account 
+    await tokenAContract.methods
+      .transfer(secondAccount, toBigNumber(10000))
+      .send({ from: account });
+
     await tokenBContract.methods
       .mint(account, INITIAL_TOKEN_BALANCE)
       .send({ from: account });
 
     await tokenAContract.methods
-      .approve(SWAP.TokenSwap, INITIAL_TOKEN_BALANCE)
+      .approve(tokenSwapContractAddress, INITIAL_TOKEN_BALANCE)
       .send({ from: account });
 
     await tokenBContract.methods
-      .approve(SWAP.TokenSwap, INITIAL_TOKEN_BALANCE)
+      .approve(tokenSwapContractAddress, INITIAL_TOKEN_BALANCE)
       .send({ from: account });
 
     let res = await tokenSwapContract.methods
