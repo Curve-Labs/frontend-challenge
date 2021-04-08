@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import { ThemeContext } from "./components/ThemeWrapper";
 import { useSelector, useDispatch } from "react-redux";
 import {
   connectWallet,
   disconnect,
 } from "../methods/redux/actions/connect-web3";
-import createPool from '../methods/redux/actions/create-pool';
+import createPool from "../methods/redux/actions/create-pool";
 import retrieveAddress from "../utils/retrieve-address";
 import _const from "../methods/_const";
 import truncateAddress from "../utils/truncate-address";
@@ -14,8 +14,8 @@ import TokenSelect from "./components/TokenModal";
 import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
 import Metamask from "../images/metamask.svg";
-import BuyToken from "../methods/contract/GetPool";
-import GetPool from "../methods/contract/GetPool";
+import GetPoolData from "../methods/redux/actions/get-pool";
+import { fromBigNumber } from "../utils/bignumber-converter";
 
 function Home() {
   const { theme, toggle } = useContext(ThemeContext);
@@ -63,13 +63,13 @@ function Home() {
 
   const dispatch = useDispatch();
 
-  const onClick = async() =>{
-    await GetPool();
-  }
-
   const history = useHistory();
 
   const { address } = useSelector((state: any) => state.ConnectWeb3);
+
+  const poolData = useSelector((state: any) => state.PoolReducer);
+
+  console.log(poolData);
 
   console.log(address, "address");
 
@@ -182,9 +182,20 @@ function Home() {
                 Connect Wallet
               </button>
             ) : (
-              <button className="submit-button" onClick={onClick}>
-                Swap Token
-              </button>
+              <>
+                <button
+                  className="secondary-submit-button"
+                  onClick={() => dispatch(GetPoolData())}
+                >
+                  Get Pool Details
+                </button>
+                <button className="submit-button">Swap Token</button>
+                {poolData === null ? (
+                  ""
+                ) : (
+                  <div>Exhange Rate : {fromBigNumber(Number(poolData?.exchangeRate))}</div>
+                )}
+              </>
             )}
           </section>
         </section>
@@ -237,7 +248,7 @@ function Home() {
                 }}
                 onClick={() => {
                   dispatch(disconnect());
-                  history.push('/');
+                  history.push("/");
                   setVisible(false);
                 }}
               >

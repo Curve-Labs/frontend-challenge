@@ -48,6 +48,8 @@ header li:not(:last-child) {
   border-bottom: 1px solid var(--stroke);
 }
 
+
+
 .wallet button {
   border: none;
   height: 38px;
@@ -170,6 +172,16 @@ main {
   border-radius: 10px;
   color: var(--buttonColor);
   background: var(--buttonBackground);
+}
+.secondary-submit-button {
+  background: transparent;
+  font-weight:bold;
+  border:none;
+  cursor: pointer;
+  color: var(--buttonColor);
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .modal {

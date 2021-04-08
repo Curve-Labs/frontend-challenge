@@ -38,11 +38,13 @@ async function GetPool() {
 
     let data = await tokenSwapContract.getPastEvents('PoolCreated', {fromBlock:0, toBlock:'latest'});
 
+    console.log(data)
+
     let eventData = data[0].returnValues
 
     let exchangeRate = eventData.exchangeRate;
 
-    let poolId = eventData.poolId;
+    let poolId = eventData.id;
 
     let tokenASupply = eventData.tokenAsupply;
 

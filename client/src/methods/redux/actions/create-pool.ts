@@ -1,4 +1,4 @@
-import CreatePool from "../../contract/CreatPool";
+import CreatePool from "../../contract/CreatePool";
 import loader from "../../../utils/loader";
 import randomgen from "../../../utils/random-gen";
 
