@@ -6,5 +6,7 @@ export default {
     ADDRESS : 'ADDRESS',
     QUEUE :'QUEUE',
     PROVIDER : 'http://localhost:8545',
-    POOL_DATA : 'POOL_DATA'
+    POOL_DATA : 'POOL_DATA',
+    BALANCE_A : 'BALANCE_A',
+    BALANCE_B : 'BALANCE_B'
 }

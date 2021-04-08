@@ -2,6 +2,8 @@ import _const from "../../_const";
 
 const initialData = {
   poolData: {},
+  balance_a:"0",
+  balance_b:"0"
 };
 
 type Action = {
@@ -16,6 +18,16 @@ function PoolReducer(state = initialData, action: Action) {
         ...state,
         poolData: action.payload,
       };
+      case _const.BALANCE_A:
+        return {
+          ...state,
+          balance_a:action.payload,
+        }
+        case _const.BALANCE_B:
+          return {
+            ...state,
+            balance_b:action.payload,
+          }
     case _const.PRISTINE:
       return {
         ...state,

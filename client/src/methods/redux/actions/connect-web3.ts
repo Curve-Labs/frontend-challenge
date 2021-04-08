@@ -8,8 +8,6 @@ import Swal from "sweetalert2";
 export const web3Connection = async function () {
   const provider = _const.PROVIDER;
   const web3 = new Web3(provider);
-  const accounts = await web3.eth.getAccounts();
-  console.log(accounts, "accounts")
   return web3;
 };
 
@@ -18,7 +16,7 @@ export const connectWallet = () => async (dispatch: Function) => {
   if (typeof window.ethereum !== "undefined") {
     const web3 = await web3Connection();
     const accounts = await web3.eth.getAccounts();
-    const account = accounts[1];
+    const account = accounts[0];
 
     saveAddress(account);
 

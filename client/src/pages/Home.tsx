@@ -6,6 +6,7 @@ import {
   connectWallet,
   disconnect,
 } from "../methods/redux/actions/connect-web3";
+import getTokenABalance from "../methods/redux/actions/get-balanceA";
 import createPool from "../methods/redux/actions/create-pool";
 import retrieveAddress from "../utils/retrieve-address";
 import _const from "../methods/_const";
@@ -58,6 +59,8 @@ function Home() {
 
     dispatch(createPool());
 
+    dispatch(getTokenABalance());
+
     // eslint-disable-next-line
   }, []);
 
@@ -68,10 +71,7 @@ function Home() {
   const { address } = useSelector((state: any) => state.ConnectWeb3);
 
   const poolData = useSelector((state: any) => state.PoolReducer);
-
-  console.log(poolData);
-
-  console.log(address, "address");
+  console.log(poolData, "poolData");
 
   const handleTokenSelection = (
     token: any,
@@ -107,6 +107,7 @@ function Home() {
     setFrom(tokens[0]);
     // eslint-disable-next-line
   }, []);
+  console.log(fromBigNumber(Number(poolData.exchangeRate)));
 
   return (
     <div className="Home">
@@ -148,7 +149,7 @@ function Home() {
 
           <section className="swaps">
             <h3>From</h3>
-            <h3>Balance</h3>
+            <h3>Balance : {fromBigNumber(poolData.balance_a)}</h3>
             <input type="text" placeholder="0.00" />
             <TokenSelect
               name="from"
@@ -166,7 +167,7 @@ function Home() {
 
           <section className="swaps">
             <h3>To</h3>
-            <h3>Balance</h3>
+            <h3>Balance : {fromBigNumber(poolData.balance_b)}</h3>
             <input type="text" placeholder="0.00" />
             <TokenSelect
               name="to"
@@ -183,18 +184,9 @@ function Home() {
               </button>
             ) : (
               <>
-                <button
-                  className="secondary-submit-button"
-                  onClick={() => dispatch(GetPoolData())}
-                >
-                  Get Pool Details
-                </button>
+      
                 <button className="submit-button">Swap Token</button>
-                {poolData === null ? (
-                  ""
-                ) : (
-                  <div>Exhange Rate : {fromBigNumber(Number(poolData?.exchangeRate))}</div>
-                )}
+        
               </>
             )}
           </section>

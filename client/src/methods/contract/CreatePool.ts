@@ -29,6 +29,7 @@ async function CreatePool() {
 
     // @ts-ignore
     let tokenBContractAddress = TokenB.networks[String(netId)].address
+    console.log(tokenBContractAddress)
     let tokenBContract = await ContractCreator(TokenB.abi, tokenBContractAddress);
 
     // @ts-ignore
