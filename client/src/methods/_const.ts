@@ -5,5 +5,6 @@ export default {
     PRISTINE : 'PRISTINE',
     ADDRESS : 'ADDRESS',
     QUEUE :'QUEUE',
-    PROVIDER : 'http://localhost:8545'
+    PROVIDER : 'http://localhost:8545',
+    POOL_DATA : 'POOL_DATA'
 }
