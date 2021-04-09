@@ -7,8 +7,9 @@ import { SWAP } from "./addresses";
 import retrieveAddress from "../../utils/retrieve-address";
 import { toBigNumber, fromBigNumber } from "../../utils/bignumber-converter";
 
-async function BuyToken(amount: number, tokenType: string, poolId: number) {
+async function BuyToken(amount: number, tokenType: string) {
   try {
+      console.log('got here')
     let web3 = await web3Connection();
 
     let account = retrieveAddress();
@@ -39,21 +40,17 @@ async function BuyToken(amount: number, tokenType: string, poolId: number) {
       tokenSwapContractAddress
     );
 
-    if (tokenType === "TOKEN_A") {
-      await tokenAContract.methods
-        .approve(tokenSwapContractAddress, toBigNumber(amount))
-        .send({ from: account });
+    if (tokenType === "TOKEN A") {
+      await tokenAContract.methods.approve(tokenSwapContractAddress, toBigNumber(amount)).send({ from: account });
 
-      let resA = await tokenSwapContract.methods
-        .buy(poolId, amount)
-        .send({ from: account });
+      let resA = await tokenSwapContract.methods.buy(0, amount).send({ from: account });
       return resA;
-    } else if (tokenType === "TOKEN_B") {
+    } else if (tokenType === "TOKEN B") {
       await tokenBContract.methods
         .approve(tokenSwapContractAddress, toBigNumber(amount))
         .send({ from: account });
       let resb = await tokenSwapContract.methods
-        .buy(poolId, amount)
+        .buy(0, amount)
         .send({ from: account });
 
       return resb;

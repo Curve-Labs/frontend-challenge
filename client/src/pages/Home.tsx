@@ -16,11 +16,14 @@ import Logo from "../images/logo.png";
 import ConnectModal from "./components/ConnectModal";
 import Metamask from "../images/metamask.svg";
 import GetPoolData from "../methods/redux/actions/get-pool";
+import BuyTokenFromPool from "../methods/redux/actions/buy-token";
 import { fromBigNumber } from "../utils/bignumber-converter";
+import InputNumber from "./components/InputNumber";
 
 function Home() {
   const { theme, toggle } = useContext(ThemeContext);
   const [from, setFrom] = useState<any>({});
+  const [amount, setAmount] = useState("0");
   const [to, setTo] = useState<any>({});
   const [visible, setVisible] = useState(false);
 
@@ -71,7 +74,6 @@ function Home() {
   const { address } = useSelector((state: any) => state.ConnectWeb3);
 
   const poolData = useSelector((state: any) => state.PoolReducer);
-  console.log(poolData, "poolData");
 
   const handleTokenSelection = (
     token: any,
@@ -92,6 +94,7 @@ function Home() {
 
     if (dest === "to") {
       if (token.name === from.name) {
+        console.log(token.name);
         // switch the tokens
         const currentTo = to;
         setTo(from);
@@ -103,11 +106,24 @@ function Home() {
     }
   };
 
+  const onBuyToken = () => {
+    let tokenAmount = Number(amount);
+    if (tokenAmount > fromBigNumber(poolData.balance_a)) {
+      alert("Insufficient funds");
+    } else if (tokenAmount <= 0){
+
+    } else{
+      console.log(tokenAmount, "amount");
+      let boughtToken = from.name;
+
+      console.log(boughtToken, "tokens")
+      dispatch(BuyTokenFromPool(tokenAmount, boughtToken));
+    }
+  };
   useEffect(() => {
     setFrom(tokens[0]);
     // eslint-disable-next-line
   }, []);
-  console.log(fromBigNumber(Number(poolData.exchangeRate)));
 
   return (
     <div className="Home">
@@ -150,7 +166,13 @@ function Home() {
           <section className="swaps">
             <h3>From</h3>
             <h3>Balance : {fromBigNumber(poolData.balance_a)}</h3>
-            <input type="text" placeholder="0.00" />
+            <InputNumber
+            label="Amount"
+             min={0}
+             value={amount}
+             onChange={(value) => setAmount(value)}
+              placeholder="0.00"
+            />
             <TokenSelect
               name="from"
               token={from}
@@ -184,9 +206,9 @@ function Home() {
               </button>
             ) : (
               <>
-      
-                <button className="submit-button">Swap Token</button>
-        
+                <button onClick={() => onBuyToken()} className="submit-button">
+                  Swap Token
+                </button>
               </>
             )}
           </section>
