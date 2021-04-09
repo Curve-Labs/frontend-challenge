@@ -35,6 +35,8 @@ contract('TokenSwap', (accounts) => {
     tokenBsupply = new BigNumber(1500).mul(decimalsBN) 
 
     exchangeRate = new BigNumber(2*PPM) 
+
+    console.log(exchangeRate, "exchange rate")
     slippage = new BigNumber(0.01*PPM);
   })
 
@@ -47,6 +49,8 @@ contract('TokenSwap', (accounts) => {
 	await tokenB.approve(tokenSwap.address, INITIAL_TOKEN_BALANCE, { from: provider })
 
     let receipt = await tokenSwap.createPool(tokenA.address, tokenB.address, tokenAsupply, tokenBsupply, slippage, exchangeRate, { from: provider })
+
+    console.log(receipt, "receipt")
 
     let balanceA = await tokenA.balanceOf(tokenSwap.address);
     let balanceB = await tokenB.balanceOf(tokenSwap.address);
@@ -66,6 +70,9 @@ it('it should buy tokens from the pool and pass slippage limit', async () => {
 
     let boughtB = await tokenB.balanceOf(buyer);
     let actualPrice  = await boughtB*exchangeRate/PPM;
+
+    let price = new BigNumber(actualPrice)
+    console.log(price, "actual price")
     let expectedPrice = tokenAamount //-(slippage*PCT_BASE/PPM)
     let slippageLimitPassed = await (expectedPrice-actualPrice <= (slippage/PPM)*expectedPrice)
 
