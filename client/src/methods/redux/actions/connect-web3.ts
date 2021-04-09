@@ -6,7 +6,16 @@ import _const from "../../_const";
 import Swal from "sweetalert2";
 
 export const web3Connection = async function () {
-  const provider = _const.PROVIDER;
+  const providerOptions = {
+    /* See Provider Options Section */
+  };
+  const web3Modal = new Web3Modal({
+    //network: "ganache", // optional
+    cacheProvider: true, // optional
+    providerOptions, // required
+  });
+
+  const provider = await web3Modal.connect();
   const web3 = new Web3(provider);
   return web3;
 };
